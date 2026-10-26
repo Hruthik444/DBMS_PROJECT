@@ -42,3 +42,4 @@ A professional DBMS capstone project to manage shared expenses and optimize debt
 - **Expense Tracking**: Add expenses with custom or equal splitting logic.
 - **Smart Settlement**: Greedy algorithm to minimize the number of payments required to clear debts.
 - **Financial Integrity**: MySQL 3NF normalization with transaction rollbacks for consistent data.
+- **Modern UI**: Premium dark/light theme toggle, responsive dashboard, profile page, and glassmorphism login.
