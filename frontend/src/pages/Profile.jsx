@@ -1,50 +1,73 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { UserCircle, Mail, Shield, LogOut, ArrowLeft } from 'lucide-react';
+import { useTheme } from '../context/ThemeContext';
+import { ArrowLeft, UserCircle, ShieldCheck, LogOut, LayoutDashboard } from 'lucide-react';
 
 const Profile = () => {
     const { user, logout } = useAuth();
+    const { darkMode } = useTheme();
     const navigate = useNavigate();
 
+    const card = darkMode ? 'bg-[#172033] border-white/10 text-[#F8FAFC]' : 'bg-white border-gray-200 text-gray-900';
+    const sub = darkMode ? 'text-[#94A3B8]' : 'text-gray-500';
+
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-900 to-purple-900 flex items-center justify-center p-4">
-            <div className="w-full max-w-lg">
-                <button onClick={() => navigate('/dashboard')} className="mb-6 flex items-center gap-2 text-white/80 hover:text-white transition">
-                    <ArrowLeft size={18} /> Back to Dashboard
-                </button>
+        <div className={`min-h-screen p-4 sm:p-6 ${darkMode ? 'bg-[#0B1120] text-[#F8FAFC]' : 'bg-[#F5F7FC] text-[#172033]'}`}>
+            <div className="max-w-5xl mx-auto">
+                <div className="mb-6">
+                    <Link to="/dashboard" className="inline-flex items-center gap-2 text-sm text-indigo-500 hover:text-indigo-600 transition">
+                        <ArrowLeft size={16} /> Back to Dashboard
+                    </Link>
+                    <p className={`text-xs mt-1 ${sub}`}>Dashboard / My Profile</p>
+                </div>
 
-                <div className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-3xl shadow-2xl overflow-hidden">
-                    <div className="h-32 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"></div>
-                    <div className="px-8 pb-8 -mt-16 text-center">
-                        <div className="inline-flex items-center justify-center w-32 h-32 rounded-full bg-gradient-to-br from-indigo-400 to-purple-600 border-4 border-white shadow-xl mb-4">
-                            <UserCircle size={80} className="text-white" />
-                        </div>
-                        <h2 className="text-3xl font-bold text-white mb-1">{user?.username || 'User'}</h2>
-                        <p className="text-white/70 mb-6">Expense Manager Member</p>
-
-                        <div className="space-y-3 text-left">
-                            <div className="flex items-center gap-3 bg-white/10 rounded-xl p-4">
-                                <Mail className="text-white/80" size={20} />
-                                <div>
-                                    <p className="text-xs text-white/60">Username</p>
-                                    <p className="text-white font-medium">{user?.username || '—'}</p>
-                                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* Profile summary */}
+                    <div className={`rounded-2xl border p-6 ${card}`}>
+                        <div className="flex items-center gap-4">
+                            <div className="w-24 h-24 rounded-full bg-indigo-500/15 flex items-center justify-center text-indigo-500">
+                                <UserCircle size={56} />
                             </div>
-                            <div className="flex items-center gap-3 bg-white/10 rounded-xl p-4">
-                                <Shield className="text-white/80" size={20} />
-                                <div>
-                                    <p className="text-xs text-white/60">Account Status</p>
-                                    <p className="text-green-300 font-medium">Active</p>
-                                </div>
+                            <div>
+                                <h2 className="text-xl font-bold">{user?.username || 'User'}</h2>
+                                <p className={`text-sm ${sub}`}>ExpenseManager Member</p>
+                                <span className="inline-block mt-2 text-xs px-2 py-1 rounded-full bg-green-500/15 text-green-500">Active</span>
                             </div>
                         </div>
+                    </div>
 
-                        <button
-                            onClick={() => { logout(); navigate('/login'); }}
-                            className="mt-8 w-full flex items-center justify-center gap-2 bg-red-500/80 hover:bg-red-500 text-white p-3 rounded-xl font-semibold transition-all"
-                        >
-                            <LogOut size={18} /> Logout
+                    {/* Account info */}
+                    <div className={`rounded-2xl border p-6 ${card}`}>
+                        <h3 className="text-lg font-semibold mb-4">Account Information</h3>
+                        <div className="space-y-3">
+                            <div className="flex items-center gap-3">
+                                <UserCircle size={18} className="text-indigo-500" />
+                                <div>
+                                    <p className={`text-xs ${sub}`}>Username</p>
+                                    <p className="font-medium">{user?.username || '—'}</p>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-3">
+                                <ShieldCheck size={18} className="text-green-500" />
+                                <div>
+                                    <p className={`text-xs ${sub}`}>Account Status</p>
+                                    <p className="font-medium text-green-500">Active</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Actions */}
+                <div className={`rounded-2xl border p-6 mt-6 ${card}`}>
+                    <h3 className="text-lg font-semibold mb-4">Account Actions</h3>
+                    <div className="flex flex-wrap gap-3">
+                        <Link to="/dashboard" className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-500 text-white font-medium hover:bg-indigo-600 transition">
+                            <LayoutDashboard size={16} /> Back to Dashboard
+                        </Link>
+                        <button onClick={() => { if (window.confirm('Log out?')) { logout(); navigate('/login'); } }} className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-red-500/40 text-red-500 hover:bg-red-500/10 transition">
+                            <LogOut size={16} /> Log Out
                         </button>
                     </div>
                 </div>
